@@ -308,7 +308,7 @@ public class GenericResource {
      * @param cuantidad
      * @return 
      */
-    @Path("reserva_habitacion")
+    @Path("reserva_varias_habitacion")
     @POST
     @Consumes("application/x-www-form-urlencoded")
     @Produces("text/html")
