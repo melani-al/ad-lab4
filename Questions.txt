@@ -1,0 +1,8 @@
+AD lab 4:
+
+Responde a las siguientes cuestiones:
+a) ¿Por qué podemos acceder la servicio desde el navegador? Porque estamos devolviendo una repsuesta de código HTML.
+b) ¿Qué método HTTP se está utilizando? GET
+c) ¿Con qué tipo MIME? text/html
+d) ¿Dónde y cómo se indica la URL, el método HTTP y el tipo MIME del servicio
+REST? 
