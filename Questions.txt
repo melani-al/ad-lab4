@@ -6,3 +6,20 @@ b) ¿Qué método HTTP se está utilizando? GET
 c) ¿Con qué tipo MIME? text/html
 d) ¿Dónde y cómo se indica la URL, el método HTTP y el tipo MIME del servicio
 REST? 
+
+
+Responde a las siguientes cuestiones:
+a) ¿Cuántos elementos (packages, ficheros, carpetas, servicios, etc.) se han creado
+automáticamente en el servicio web?
+
+b) ¿Para qué sirve FormParam? Busca información de cómo se recogen los parámetros
+en los métodos REST implementados en Java.
+
+c) Prueba de llamar desde el navegador a
+http://localhost:8080/RestAD/webresources/generic/reserva. ¿Por qué
+no funciona? ¿Qué error HTTP devuelve el servidor? ¿Por qué? 
+Porque es de tipo post y espera unos parametros de entrada.
+Devuelve error 500 Internal server error porque no le enviamos los parametros esperados.
+
+d) Utiliza la opción Test RESTful Web Services para monitorizar el servicio REST que
+has implementado. Puedes comprobar cómo es la petición, la respuesta, etc.

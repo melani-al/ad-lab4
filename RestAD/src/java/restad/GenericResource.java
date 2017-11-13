@@ -87,8 +87,8 @@ public class GenericResource {
         {            
           // load the sqlite-JDBC driver using the current class loader
             Class.forName("org.sqlite.JDBC"); 
-            connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
-            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\lab3-ad\\dblab3");
+            //connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\LAB4\\dblab4");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             
@@ -139,26 +139,38 @@ public class GenericResource {
         {            
           // load the sqlite-JDBC driver using the current class loader
             Class.forName("org.sqlite.JDBC"); 
-            connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
-            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\lab3-ad\\dblab3");
+            //connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\LAB4\\dblab4");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             
-            String query = "select * from vuelo_fecha where id_hotel= ? and fecha = ?";
+            String query = "select * from vuelo_fecha where id_vuelo= ? and fecha = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, id_vuelo);
             pstmt.setInt(2, fecha);
             ResultSet rs = pstmt.executeQuery();
             
-            while(rs.next()) {
-                if ((rs.getInt("num_plazas_max") - rs.getInt("num_plazas_ocupadas")) > 0) {
-                    ret = rs.getInt("num_plaza_ocupadas") + 1;
-                    PreparedStatement ps = connection.prepareStatement("update hotel_fecha set num_plaza_ocupadas = num_plaza_ocupadas +1 where id_hotel= ?");
-                    ps.setInt(1, id_vuelo);
-                    ps.executeUpdate();
-                }else{
-                    ret = -1;
-                }
+            if (!rs.isBeforeFirst() ) {    
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO vuelo_fecha (id_vuelo, fecha, num_plazas_ocupadas, num_plazas_max) VALUES(?,?,?,?)"); 
+                ps.setInt(1, id_vuelo);
+                ps.setInt(2, fecha);
+                ps.setInt(3, 1);
+                ps.setInt(4, 5);
+                ps.executeUpdate();
+                ret = 1;
+            } 
+            else {
+                while(rs.next()) {
+                    if ((rs.getInt("num_plazas_max") - rs.getInt("num_plazas_ocupadas")) > 0) {
+                        ret = rs.getInt("num_plazas_ocupadas") + 1;
+                        PreparedStatement ps = connection.prepareStatement("update vuelo_fecha set num_plazas_ocupadas = num_plazas_ocupadas +1 where id_vuelo= ?");
+                        ps.setInt(1, id_vuelo);
+                        ps.executeUpdate();
+                    }
+                    else{
+                        ret = -1;
+                    }
+                } 
             }
         }
         catch(SQLException | ClassNotFoundException e)
@@ -199,8 +211,8 @@ public class GenericResource {
         {            
           // load the sqlite-JDBC driver using the current class loader
             Class.forName("org.sqlite.JDBC"); 
-            connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
-            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\lab3-ad\\dblab3");
+            //connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\LAB4\\dblab4");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             
@@ -212,7 +224,6 @@ public class GenericResource {
             ResultSet rs = pstmt.executeQuery();
 
             while(rs.next()) {
-                System.out.println("hello");
                 ret = rs.getInt("num_hab_libres");
             }
         }
@@ -253,8 +264,8 @@ public class GenericResource {
         {            
           // load the sqlite-JDBC driver using the current class loader
             Class.forName("org.sqlite.JDBC"); 
-            connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
-            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\lab3-ad\\dblab3");
+            //connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\LAB4\\dblab4");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             
@@ -264,16 +275,27 @@ public class GenericResource {
             pstmt.setInt(2, fecha);
             ResultSet rs = pstmt.executeQuery();
             
-            while(rs.next()) {
-                if (rs.getInt("num_hab_libres") > 0) {
-                    ret = rs.getInt("num_hab_ocupadas") + 1;
-                    PreparedStatement ps = connection.prepareStatement("update hotel_fecha set num_hab_ocupadas = num_hab_ocupadas +1 where id_hotel= ?");
-                    ps.setInt(1, id_hotel);
-                    ps.executeUpdate();
-                    PreparedStatement ps2 = connection.prepareStatement("update hotel_fecha set num_hab_libres = num_hab_libres -1 where id_hotel= ?");
-                    ps2.setInt(1, id_hotel);
-                    ps2.executeUpdate();
-                }
+            if (!rs.isBeforeFirst() ) {    
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO hotel_fecha (id_hotel, fecha, num_hab_ocupadas, num_hab_libres) VALUES(?,?,?,?)"); 
+                ps.setInt(1, id_hotel);
+                ps.setInt(2, fecha);
+                ps.setInt(3, 1);
+                ps.setInt(4, 4);
+                ps.executeUpdate();
+                ret = 1;
+            } 
+            else {
+                while(rs.next()) {
+                    if (rs.getInt("num_hab_libres") > 0) {
+                        ret = rs.getInt("num_hab_ocupadas") + 1;
+                        PreparedStatement ps = connection.prepareStatement("update hotel_fecha set num_hab_ocupadas = num_hab_ocupadas +1 where id_hotel= ?");
+                        ps.setInt(1, id_hotel);
+                        ps.executeUpdate();
+                        PreparedStatement ps2 = connection.prepareStatement("update hotel_fecha set num_hab_libres = num_hab_libres -1 where id_hotel= ?");
+                        ps2.setInt(1, id_hotel);
+                        ps2.executeUpdate();
+                    }
+                } 
             }
         }
         catch(SQLException | ClassNotFoundException e)
@@ -314,8 +336,8 @@ public class GenericResource {
         {            
           // load the sqlite-JDBC driver using the current class loader
             Class.forName("org.sqlite.JDBC"); 
-            connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
-            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\lab3-ad\\dblab3");
+            //connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\LAB4\\dblab4");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             
@@ -325,17 +347,28 @@ public class GenericResource {
             pstmt.setInt(2, fecha);
             ResultSet rs = pstmt.executeQuery();
             
-            while(rs.next()) {
-                if (rs.getInt("num_hab_libres") >= cantidad) {
-                    ret = rs.getInt("num_hab_ocupadas") + cantidad;
-                    PreparedStatement ps = connection.prepareStatement("update hotel_fecha set num_hab_ocupadas = num_hab_ocupadas +? where id_hotel= ?");
-                    ps.setInt(1, cantidad);
-                    ps.setInt(2, id_hotel);
-                    ps.executeUpdate();
-                    PreparedStatement ps2 = connection.prepareStatement("update hotel_fecha set num_hab_libres = num_hab_libres -? where id_hotel= ?");
-                    ps2.setInt(1, cantidad);
-                    ps2.setInt(2, id_hotel);
-                    ps2.executeUpdate();
+            if (!rs.isBeforeFirst() ) {    
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO hotel_fecha (id_hotel, fecha, num_hab_ocupadas, num_hab_libres) VALUES(?,?,?,?)"); 
+                ps.setInt(1, id_hotel);
+                ps.setInt(2, fecha);
+                ps.setInt(3, cantidad);
+                ps.setInt(4, 4);
+                ps.executeUpdate();
+                ret = 1;
+            } 
+            else {
+                while(rs.next()) {
+                    if (rs.getInt("num_hab_libres") >= cantidad) {
+                        ret = rs.getInt("num_hab_ocupadas") + cantidad;
+                        PreparedStatement ps = connection.prepareStatement("update hotel_fecha set num_hab_ocupadas = num_hab_ocupadas +? where id_hotel= ?");
+                        ps.setInt(1, cantidad);
+                        ps.setInt(2, id_hotel);
+                        ps.executeUpdate();
+                        PreparedStatement ps2 = connection.prepareStatement("update hotel_fecha set num_hab_libres = num_hab_libres -? where id_hotel= ?");
+                        ps2.setInt(1, cantidad);
+                        ps2.setInt(2, id_hotel);
+                        ps2.executeUpdate();
+                    }
                 }
             }
         }
@@ -377,8 +410,8 @@ public class GenericResource {
         {            
           // load the sqlite-JDBC driver using the current class loader
             Class.forName("org.sqlite.JDBC"); 
-            connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
-            //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\lab3-ad\\dblab3");
+            //connection = DriverManager.getConnection("jdbc:sqlite:/Users/Celina/Documents/00 Documentos - Celinas MacBook Air/Uni/5.Auslandssemester/AD/Ejercisios/ad-lab3/dblab3");
+            connection = DriverManager.getConnection("jdbc:sqlite:jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\LAB4\\dblab4");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             
@@ -388,17 +421,29 @@ public class GenericResource {
             pstmt.setInt(2, fecha);
             ResultSet rs = pstmt.executeQuery();
             
-            while(rs.next()) {
-                if ((rs.getInt("num_plazas_max") - rs.getInt("num_plazas_ocupadas")) >= cantidad) {
-                    ret = rs.getInt("num_plaza_ocupadas") + cantidad;
-                    PreparedStatement ps = connection.prepareStatement("update hotel_fecha set num_plaza_ocupadas = num_plaza_ocupadas ? where id_hotel= ?");
-                    ps.setInt(1, cantidad);
-                    ps.setInt(2, id_vuelo);
-                    ps.executeUpdate();
-                }else{
-                    ret = -1;
+            if (!rs.isBeforeFirst() ) {    
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO hotel_fecha (id_hotel, fecha, num_hab_ocupadas, num_hab_libres) VALUES(?,?,?,?)"); 
+                ps.setInt(1, id_vuelo);
+                ps.setInt(2, fecha);
+                ps.setInt(3, cantidad);
+                ps.setInt(4, 4);
+                ps.executeUpdate();
+                ret = 1;
+            } 
+            else {
+                while(rs.next()) {
+                    if ((rs.getInt("num_plazas_max") - rs.getInt("num_plazas_ocupadas")) >= cantidad) {
+                        ret = rs.getInt("num_plaza_ocupadas") + cantidad;
+                        PreparedStatement ps = connection.prepareStatement("update hotel_fecha set num_plaza_ocupadas = num_plaza_ocupadas ? where id_hotel= ?");
+                        ps.setInt(1, cantidad);
+                        ps.setInt(2, id_vuelo);
+                        ps.executeUpdate();
+                    }else{
+                        ret = -1;
+                    }
                 }
             }
+            
         }
         catch(SQLException | ClassNotFoundException e)
         {
