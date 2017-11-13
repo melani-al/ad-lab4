@@ -61,8 +61,6 @@ public class GenericResource {
     }
     
     /**
-    * Método POST para reservar una plaza dados un id y
-    * una fecha
     * @param id
     * @param fecha
     * @return
@@ -190,14 +188,14 @@ public class GenericResource {
     /**
      *
      * @param id_hotel
-     * @param date
+     * @param fecha
      * @return
      */
-    @Path("consulta_libre_habitaciones")
+    @Path("consulta_libres_habitaciones")
     @POST
     @Consumes("application/x-www-form-urlencoded")
     @Produces("text/html")
-    public String consulta_libre_habitaciones(@WebParam(name = "id_hotel") Integer id_hotel, @WebParam(name = "date") Integer date) {
+    public String consulta_libres_habitaciones (@FormParam("id_hotel") int id_hotel, @FormParam("fecha") int fecha) {
         Connection connection = null;
         Integer ret = 0;
         try                        
@@ -213,7 +211,7 @@ public class GenericResource {
            
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, id_hotel);
-            pstmt.setInt(2, date);
+            pstmt.setInt(2, fecha);
             ResultSet rs = pstmt.executeQuery();
 
             while(rs.next()) {
@@ -251,7 +249,7 @@ public class GenericResource {
     @POST
     @Consumes("application/x-www-form-urlencoded")
     @Produces("text/html")
-    public String reserva_habitacion(@WebParam(name = "id_hotel") Integer id_hotel, @WebParam(name = "fecha") Integer fecha) {
+    public String reserva_habitacion(@FormParam("id_hotel") int id_hotel, @FormParam("fecha") int fecha) {
         Connection connection = null;
         Integer ret = -1;
         try                        
@@ -305,14 +303,14 @@ public class GenericResource {
      * Web service operation
      * @param id_hotel
      * @param fecha
-     * @param cuantidad
+     * @param cantidad
      * @return 
      */
     @Path("reserva_varias_habitacion")
     @POST
     @Consumes("application/x-www-form-urlencoded")
     @Produces("text/html")
-    public String reserva_varias_habitacion(@WebParam(name = "id_hotel") Integer id_hotel, @WebParam(name = "fecha") Integer fecha, @WebParam(name = "cuantidad") Integer cuantidad) {
+    public String reserva_varias_habitacion(@FormParam("id_hotel") int id_hotel, @FormParam("fecha") int fecha, @WebParam(name = "cantidad") Integer cantidad) {
         Connection connection = null;
         Integer ret = -1;
         try                        
@@ -331,14 +329,14 @@ public class GenericResource {
             ResultSet rs = pstmt.executeQuery();
             
             while(rs.next()) {
-                if (rs.getInt("num_hab_libres") >= cuantidad) {
-                    ret = rs.getInt("num_hab_ocupadas") + cuantidad;
+                if (rs.getInt("num_hab_libres") >= cantidad) {
+                    ret = rs.getInt("num_hab_ocupadas") + cantidad;
                     PreparedStatement ps = connection.prepareStatement("update hotel_fecha set num_hab_ocupadas = num_hab_ocupadas +? where id_hotel= ?");
-                    ps.setInt(1, cuantidad);
+                    ps.setInt(1, cantidad);
                     ps.setInt(2, id_hotel);
                     ps.executeUpdate();
                     PreparedStatement ps2 = connection.prepareStatement("update hotel_fecha set num_hab_libres = num_hab_libres -? where id_hotel= ?");
-                    ps2.setInt(1, cuantidad);
+                    ps2.setInt(1, cantidad);
                     ps2.setInt(2, id_hotel);
                     ps2.executeUpdate();
                 }
@@ -368,14 +366,14 @@ public class GenericResource {
      *
      * @param id_vuelo
      * @param fecha
-     * @param cuantidad
+     * @param cantidad
      * @return
      */
     @Path("reserva_varias_plaza")
     @POST
     @Consumes("application/x-www-form-urlencoded")
     @Produces("text/html")
-    public String reserva_varias_plaza (@FormParam("id_vuelo") int id_vuelo, @FormParam("fecha") int fecha, @FormParam("cuantidad") int cuantidad){
+    public String reserva_varias_plaza (@FormParam("id_vuelo") int id_vuelo, @FormParam("fecha") int fecha, @FormParam("cantidad") int cantidad){
         Connection connection = null;
         Integer ret = -1;
         try                        
@@ -394,10 +392,10 @@ public class GenericResource {
             ResultSet rs = pstmt.executeQuery();
             
             while(rs.next()) {
-                if ((rs.getInt("num_plazas_max") - rs.getInt("num_plazas_ocupadas")) >= cuantidad) {
-                    ret = rs.getInt("num_plaza_ocupadas") + cuantidad;
+                if ((rs.getInt("num_plazas_max") - rs.getInt("num_plazas_ocupadas")) >= cantidad) {
+                    ret = rs.getInt("num_plaza_ocupadas") + cantidad;
                     PreparedStatement ps = connection.prepareStatement("update hotel_fecha set num_plaza_ocupadas = num_plaza_ocupadas ? where id_hotel= ?");
-                    ps.setInt(1, cuantidad);
+                    ps.setInt(1, cantidad);
                     ps.setInt(2, id_vuelo);
                     ps.executeUpdate();
                 }else{
@@ -425,4 +423,5 @@ public class GenericResource {
         //(ret == -1) return "<html><head/><body><h1>Error -1!</h1><br><h3>No plazas libres<h/3><body></html>";
         return ret.toString();
     }
+    
 }
