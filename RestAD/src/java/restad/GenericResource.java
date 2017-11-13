@@ -143,7 +143,6 @@ public class GenericResource {
             //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\lab3-ad\\dblab3");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
-            System.out.println("in try block");
             
             String query = "select * from vuelo_fecha where id_hotel= ? and fecha = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -367,11 +366,11 @@ public class GenericResource {
      * @param cantidad
      * @return
      */
-    @Path("reserva_varias_plaza")
+    @Path("reserva_varias_plazas")
     @POST
     @Consumes("application/x-www-form-urlencoded")
     @Produces("text/html")
-    public String reserva_varias_plaza (@FormParam("id_vuelo") int id_vuelo, @FormParam("fecha") int fecha, @FormParam("cantidad") int cantidad){
+    public String reserva_varias_plazas (@FormParam("id_vuelo") int id_vuelo, @FormParam("fecha") int fecha, @FormParam("cantidad") int cantidad){
         Connection connection = null;
         Integer ret = -1;
         try                        
