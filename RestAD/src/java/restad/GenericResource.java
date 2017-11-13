@@ -11,11 +11,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -84,7 +82,7 @@ public class GenericResource {
     @Produces("text/html")
     public String consulta_libres (@FormParam("id_vuelo") int id_vuelo, @FormParam("fecha") int fecha){
         Connection connection = null;
-        Integer ret = 0;
+        Integer ret = -1;
         try                        
         {            
           // load the sqlite-JDBC driver using the current class loader
@@ -102,7 +100,6 @@ public class GenericResource {
             ResultSet rs = pstmt.executeQuery();
 
             while(rs.next()) {
-                System.out.println("hello");
                 ret = rs.getInt("num_plazas_max") - rs.getInt("num_plazas_ocupadas");
             }
         }
@@ -146,6 +143,7 @@ public class GenericResource {
             //connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Melani\\Desktop\\FIB\\TI\\AD\\lab3-ad\\dblab3");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            System.out.println("in try block");
             
             String query = "select * from vuelo_fecha where id_hotel= ? and fecha = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);

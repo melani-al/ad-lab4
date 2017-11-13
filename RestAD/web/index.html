@@ -11,10 +11,49 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-<form action="webresources/generic/reserva_plaza" method="post">
-<input type="text" name="id_vuelo"/>
-<input type="text" name="fecha"/>
-<input type="submit" name="submit" value="Send"/>
-</form>
-</body>
+        <h1>Comprueba el WebService </h1>
+        <h3>Cuántos plazas son libre en un avion?</h3>
+        <form action="webresources/generic/consulta_libres" method="post">
+            <input type="text" name="id_vuelo"/>
+            <input type="text" name="fecha"/>
+            <input type="submit" name="submit" value="Send"/>
+        </form>
+        
+        <h3>Cuándo quieres reservar una plaza en un avion?</h3>
+        <form action="webresources/generic/reserva_plaza" method="post">
+            <input type="text" name="id_vuelo"/>
+            <input type="text" name="fecha"/>
+            <input type="submit" name="submit" value="Send"/>
+        </form>
+        
+        <h3>Cuántos habitaciónes son libre en un hotel?</h3>
+        <form action="webresources/generic/reserva_plaza" method="post">
+            <input type="text" name="id_hotel"/>
+            <input type="text" name="fecha"/>
+            <input type="submit" name="submit" value="Send"/>
+        </form>
+        
+        <h3>Cuándo quieres reservar una habitación en un hotel?</h3>
+        <form action="webresources/generic/reserva_plaza" method="post">
+            <input type="text" name="id_hotel"/>
+            <input type="text" name="fecha"/>
+            <input type="submit" name="submit" value="Send"/>
+        </form>
+        
+        <h3>Cuándo quieres reservar varias plaza en un avion?</h3>
+        <form action="webresources/generic/reserva_plaza" method="post">
+            <input type="text" name="id_vuelo"/>
+            <input type="text" name="fecha"/>
+            <input type="text" name="cantidad"/>
+            <input type="submit" name="submit" value="Send"/>
+        </form>
+        
+        <h3>Cuándo quieres reservar varias habitaciones en un hotel?</h3>
+        <form action="webresources/generic/reserva_plaza" method="post">
+            <input type="text" name="id_hotel"/>
+            <input type="text" name="fecha"/>
+            <input type="text" name="cantidad"/>
+            <input type="submit" name="submit" value="Send"/>
+        </form>
+    </body>
 </html>
